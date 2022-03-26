@@ -96,6 +96,34 @@
   </div>
 
 <script>
+
+  // select input that is first checked
+    // input:checked is true, select it
+    const inputs = document.querySelectorAll('input');
+    const checkboxes = Array.from(inputs);
+    let lastChecked;
+    function checked(event) {
+      let inBetween = false;
+      if (event.shiftKey && this.checked) {
+        checkboxes.forEach(checkbox => {
+          console.log(checkbox);
+          if (checkbox === this || checkbox === lastChecked) {
+            inBetween = !inBetween;
+            console.log('hello');
+          }
+          if (inBetween) {
+            checkbox.checked = true;
+          }
+        }
+      )}
+      lastChecked = this;
+    }
+  checkboxes.forEach(input => input.addEventListener('click', checked));
+  // const checkedInput = document.querySelector('input:checked');
+  // console.log(checkedInput);
+  // select the second input that is checked
+    // input:checked is true, select it
+  // select the ones in between
 </script>
 </body>
 </html>

@@ -25,14 +25,54 @@
     </form>
   </div>
 
+
+
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const textInput = document.querySelector('input[name="item"]');
+
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function handleItems(event) {
+    event.preventDefault();
+    const tapa = textInput.value;
+    const tapaObject = {
+      tapa,
+      done: false
+    };
+    items.push(tapaObject);
+    populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
+    console.log(items);
+    this.reset();
+  }
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((item, i) => {
+      return `
+        <li>
+          <input type="checkbox" name="tapa" data-index=${i} id="item${i}" ${item.done ? 'checked' : ''}/>
+          <label for="item${i}">${item.tapa}</label>
+        </li>`;
+    }).join('');
+  }
+
+  function checkDone(event) {
+    if (event.target.matches('input')) {
+      const index = event.target.dataset.index;
+      items[index].done = !items[index].done;
+      localStorage.setItem('items', JSON.stringify(items));
+    }
+  }
+
+
+  addItems.addEventListener('submit', handleItems);
+  populateList(items, itemsList);
+  itemsList.addEventListener('click', checkDone);
 
 </script>
 
 
 </body>
 </html>
-

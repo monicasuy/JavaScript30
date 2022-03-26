@@ -58,6 +58,34 @@
       };
     }
 
+    // query select all the images
+    const images = document.querySelectorAll('.slide-in');
+
+    function slideImages(event) {
+      // const position = window.scrollY || document.documentElement.scrollTop;
+      // console.log(position)
+      images.forEach(image => {
+        // scrollY is the pixels that we've already scrolled through and we add innerHeight bcs
+        // we need to get to the bottom and we subtract half of the image height so we'll get the position
+        // where half the image is shown on screen as we scroll
+        const heightSlideIn = (window.scrollY + window.innerHeight) - image.height / 2;
+        const imageBottom = image.offsetTop + image.height
+        const halfShown = heightSlideIn > image.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        // const scrolledPast =
+        if (halfShown && isNotScrolledPast) {
+          image.classList.add('active');
+        } else {
+          image.classList.remove('active');
+        }
+
+      });
+
+    };
+
+    // listen for scroll and change translate x and opacity accordingly
+    window.addEventListener('scroll', debounce(slideImages));
+
   </script>
 
   <style>
@@ -68,11 +96,11 @@
       font-size: 20px;
       font-weight: 200;
     }
-    
+
     body {
       margin: 0;
     }
-    
+
     *, *:before, *:after {
       box-sizing: inherit;
     }
@@ -107,7 +135,7 @@
     .align-left.slide-in {
       transform: translateX(-30%) scale(0.95);
     }
-    
+
     .align-right.slide-in {
       transform: translateX(30%) scale(0.95);
     }

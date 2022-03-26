@@ -17,6 +17,48 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+// 1. create cities array
+const cities = [];
+// 2. fetch the cities
+  fetch(endpoint)
+    .then(response => response.json())
+    .then((data) => {
+      // 3. push the cities into the array
+      data.forEach((element) => cities.push(element))
+
+    });
+
+    const form = document.querySelector('.search-form')
+    form.addEventListener('keyup', (event) => {
+      // find
+      const input = event.currentTarget.querySelector('.search');
+      const regex = new RegExp(input.value, 'gi');
+      const filteredCities = cities.filter(place => place.city.match(regex) || place.state.match(regex));
+      console.log(filteredCities)
+
+      // display
+      const suggestions = event.currentTarget.querySelector('.suggestions');
+      const html = filteredCities.map(place => {
+        const cityName = place.city.replace(regex, `<span class="hl">${input.value}</span>`);
+        const stateName = place.state.replace(regex, `<span class="hl">${input.value}</span>`);
+        // search bar: new
+        // results: <li> <span class= name> <span class=hl>new</span> york, <span class=hl>new</span> york </span>
+        return `
+        <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        </li>
+        `;
+      }).join('');
+      suggestions.innerHTML = html;
+    })
+
+
+
+// 4. select the search bar with query selector
+// 5. addEventListener to search bar
+
+// 6. keyup event so when we write into the search bar it filters through the cities
+
 </script>
 </body>
 </html>
